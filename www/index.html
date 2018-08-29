@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+
+<!-- Mirrored from getbootstrap.com/docs/4.0/examples/starter-template/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 15 Feb 2018 04:01:09 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Escala Geriátrica</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="css/site.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-light bg-white border-bottom fixed-top">
+      <a class="navbar-brand" href="index.html">Escala Geriátrica</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#modal-info" data-toggle="modal">Información general</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#modal-about" data-toggle="modal">Acerca de...</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main id="app" role="main" class='container pb-4'>
+
+      <form id="form" action="javascript:void(0)" class="carousel slide" data-interval="false" data-wrap="false">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <h2>Instrucciones</h2>
+            <ol>
+              <li>Seleccione el ítem correspondiente en cada indicador de acuerdo a la respuesta del paciente.</li>
+              <li>Si el paciente no coopera utilice la opinión del cuidador responsable.</li>
+              <li>Ante la duda en algún ítem seleccione el de menor valor (1).</li>
+            </ol>
+            <p class='pt-4 mt-4 border-top'>
+              <button class="btn btn-primary" v-on:click="carousel_next">Siguiente</button>
+            </p>
+          </div>
+          <fieldset v-for="q in questions" class="carousel-item">
+            <legend class="col-form-label font-weight-bold">{{q.label}}</legend>
+            <div class="form-check" v-for="o in q.options">
+              <input class="form-check-input" type="radio"
+                v-bind:id="q.name+'_'+o.value"
+                v-model.number.lazy="q.value"
+                v-bind:value="o.value"
+                v-bind:name="q.name"
+                v-on:change="validate"/>
+              <label class="form-check-label" v-bind:for="q.name+'_'+o.value">{{o.label}}</label>
+            </div>
+            <p class='pt-4 mt-4 border-top'>
+              <button class="btn btn-default" v-on:click="carousel_prev">Atrás</button>
+            </p>
+          </fieldset>
+          <div class="carousel-item">
+            <h2>Test finalizado</h2>
+            <p>La persona analizada ha alcanzado una evaluación de:</p>
+
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th colspan="2" class="text-center"><span class="display-4">{{result}}</span><br/>
+                    {{result_label}}
+                  </th>
+                </tr>
+                <tr>
+                  <th>Indicador</th>
+                  <th>Evaluación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="q in questions">
+                  <td>{{q.label}}</td><td class='text-right'>{{q.value}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p class='pt-4 mt-4 border-top'>
+              <button class="btn btn-default" v-on:click="reset">Reiniciar</button>
+            </p>
+          </div>
+        </div>
+      </form>
+
+      <div class="fixed-bottom bg-white pt-1">
+        <div class="progress rounded-0" style="height: 5px">
+          <div class="progress-bar" role="progressbar" v-bind:style="progress_style" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="modal-info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Información general</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="overflow: auto">
+
+            <p>A quien tome decisiones diagnósticas o terapéuticas en el adulto mayor no debe bastarle con el diagnóstico clínico, debe considerar además de la repercusión funcional sobre el individuo, la capacidad funcional residual con que cuenta el mismo para enfrentar los problemas de salud.</p>
+            <p>Esta última no depende solo de las posibilidades propias sino también de las que brinda el medio familiar, social y económico donde el paciente se desenvuelve. Estos intereses son recogidos por la <strong>Escala Geriátrica de Evaluación Funcional Global</strong> que, de forma sencilla, le permitirá reconocer precozmente alteraciones en funciones vitales para la  autonomía del adulto mayor al evaluar a partir de su estado base la evolución de estas funciones y con una intervención precoz evitar la discapacidad y prolongar su vida activa.</p>
+            <p>Además, el instrumento contribuirá a identificar el anciano frágil, el de más alto riesgo para el que tendrá que diseñar en conjunto con el EMAG un plan especial para su manejo.</p>
+            <p>En todos los casos los estados de deterioro se evalúan con respecto a las actividades de la vida diaria estas son aquellas que el individuo debe hacer por si solo para considerarse independiente. De forma clásica estas se han dividido en actividades básicas de la vida diaria (ABVD) siendo las más elementales bañarse, vestirse, ir al baño, movilizarse, la continencia, la alimentación y la actividad instrumental de la vida diaria (ATVD) como hablar por teléfono, movilizarse fuera del hogar, comprar, prepararse los alimentos, hacer tareas hogareñas o manuales, tomar sus medicinas o manejar su dinero.</p>
+            <p>La escala no sustituye el examen clínico que se recomienda realizar como parte del examen periódico de salud al adulto mayor, <em>solamente lo complementa</em>.</p>
+            <p>Criterios de remisión para el EMAG (anciano frágil):</p>
+            <ul>
+              <li>Doble incontinencia.</li>
+              <li>Confinado a cama o sillón.</li>
+              <li>Todos los ítems de la EGEF en 4.</li>
+              <li>APP de Síndrome demencial asociado a: alteraciones del estado emocional y de la memoria de o de los ítems apoyo familiar, social o situación económica.</li>
+              <li>APP de depresión o intento suicida asociado a: alteraciones del estado emocional, alteraciones en los ítems apoyo familiar, social y situación económica o alteraciones de la memoria.</li>
+              <li>Alteraciones del estado emocional asociados a alteraciones de la memoria.</li>
+              <li>Alteraciones del estado emocional asociados a alteraciones de la memoria.</li>
+              <li>Alteraciones de los ítems, apoyo familiar, apoyo social y situación socioeconómica asociados a alteraciones del estado emocional, de la memoria o trastorno de sueño.</li>
+              <li>Cualquier combinación de alteraciones en los ítems de apoyo familiar, apoyo social y situación económica.</li>
+              <li>Alteraciones del estado funcional global.</li>
+            </ul>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modal-about" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Acerca de...</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="overflow: auto">
+
+            <h2 class='h5'>Preguntas, sugerencias y comentarios</h2>
+            <ul>
+              <li><a href="mailto:info@daxslab.com?subject=Sobre APP 'Escala geriátrica'">info@daxslab.com</a></li>
+            </ul>
+
+            <h2 class='h5'>Desarrollo</h2>
+
+            <p>
+              <strong>Escala geriátrica</strong> es software libre disponible en <a href="https://github.com/daxslab/escala-geriatrica">https://github.com/daxslab/escala-geriatrica</a>.
+            </p>
+
+            <h3 class='h6'>Base teórica</h3>
+            <ul>
+              <li>Dra. Anaharis B. Morejón Pérez.</li>
+            </ul>
+
+            <h3 class='h6'>Diseño y programación</h3>
+            <ul>
+              <li>MSc. Ing. Gabriel A. López López</li>
+              <li>Ing. Carlos C. Caballero Diaz.</li>
+            </ul>
+
+            <hr>
+
+            <div>
+              <small><a href="http://www.daxslab.com" target='_blank'>daxslab.com</a></small>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </main><!-- /.container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/app.js"></script>
+
+  </body>
+
+<!-- Mirrored from getbootstrap.com/docs/4.0/examples/starter-template/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 15 Feb 2018 04:01:09 GMT -->
+</html>
